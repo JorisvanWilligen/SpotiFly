@@ -9,6 +9,11 @@ import {TokenInterceptorService} from "./interceptors/token-interceptor.service"
 import {SpotifyService} from "./services/spotify.service";
 import {SearchBoxComponent} from "./components/search-box/search-box.component";
 import {ResultBoxComponent} from "./components/result-box/result-box.component";
+import {LottieModule} from "ngx-lottie";
+
+export function playerFactory(): any {
+  return import('lottie-web');
+}
 
 @NgModule({
   declarations: [
@@ -20,7 +25,8 @@ import {ResultBoxComponent} from "./components/result-box/result-box.component";
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    RouterModule.forRoot([])
+    RouterModule.forRoot([]),
+    LottieModule.forRoot({ player: playerFactory }),
   ],
   providers: [
     {

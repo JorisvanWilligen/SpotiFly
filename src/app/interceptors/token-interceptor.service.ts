@@ -27,11 +27,9 @@ export class TokenInterceptorService implements HttpInterceptor {
     return next.handle(request).pipe(
       catchError((err) => {
         if (err.status === 401) {
-          console.log('Should refresh token');
           this.spotifyService.refreshAccessToken();
         }
         if (err.status === 401) {
-          console.log('Should re-Authenticate');
           localStorage.clear();
           this.spotifyService.authUser();
         }

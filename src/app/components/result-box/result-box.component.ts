@@ -24,7 +24,6 @@ export class ResultBoxComponent implements OnInit {
     this.songs = result.tracks.items;
     this.artists = result.artists.items;
     this.albums = result.albums.items;
-    console.log(this.songs);
   }
 
   playSound(source: string){

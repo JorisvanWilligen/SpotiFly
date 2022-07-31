@@ -1,3 +1,9 @@
+<div [className]= "this.loading ? 'loadingFadeIn' : 'loadingFadeOut'">
+  <ng-lottie
+    [options]="options"
+    (animationCreated)="this.onAnimate($event)">
+  </ng-lottie>
+</div>
 <div>
   <label>
     <input class="searchBox" [(ngModel)]="searchText" (keyup)="onKey($event)" placeholder="Type to fly to any song, artist or album">
