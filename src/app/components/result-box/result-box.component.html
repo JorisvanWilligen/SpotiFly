@@ -1,0 +1,59 @@
+<div *ngIf="this.songs || this.artists || this.albums">
+  <h2 class="content-type-text">Songs</h2>
+  <div class="container">
+    <div *ngFor="let song of songs">
+      <div class="result-box">
+        <div class="horizontal-container">
+          <div class="horizontal-container-image">
+            <img *ngIf="song.album.images[2]" class="image-container" src="{{this.song.album.images[2].url}}">
+            <img (click)="this.playSound(this.song.preview_url)" *ngIf="song.album.images[2]" class="audio-controller" src="{{this.playIcon(this.song.preview_url)}}">
+          </div>
+          <div class="horizontal-container-description">
+            <h3 class="title">{{song.name}}</h3>
+            <h4 class="subtitle">{{song.artists[0].name}}</h4>
+            <h4 class="subtitle">{{song.album.name}}</h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="songs.length == 0">
+      <h3 class="title white" >No songs found :(</h3>
+    </div>
+  </div>
+  <h2 class="content-type-text">Artist</h2>
+  <div class="container">
+    <div *ngFor="let artist of artists">
+      <div class="result-box artist-box">
+        <h3 class="title artist-text">{{artist.name}}</h3>
+        <div class="artist-text">
+          <span *ngIf="artist.genres[0]" class="subtitle genre">{{artist.genres[0]}}</span>
+          <span *ngIf="artist.genres[1]" class="subtitle genre">, {{artist.genres[1]}}</span>
+          <span *ngIf="artist.genres[2]" class="subtitle genre">, {{artist.genres[2]}}</span>
+          <span *ngIf="artist.genres[3]" class="subtitle genre">...</span>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="artists.length == 0">
+      <h3 class="title white">No artists were found :(</h3>
+    </div>
+  </div>
+  <h2 class="content-type-text">Albums</h2>
+  <div class="container">
+    <div *ngFor="let album of albums;">
+      <div class="result-box">
+        <div class="horizontal-container">
+          <div class="horizontal-container-image">
+            <img *ngIf="this.album.images[2]" class="image-container" src="{{this.album.images[2].url}}">
+          </div>
+          <div class="horizontal-container-description">
+            <h3 class="title">{{album.name}}</h3>
+            <h4 class="subtitle">{{album.release_date}}</h4>
+          </div>
+          </div>
+      </div>
+    </div>
+    <div *ngIf="albums.length == 0">
+      <h3 class="title white">No albums found :(</h3>
+    </div>
+  </div>
+</div>
