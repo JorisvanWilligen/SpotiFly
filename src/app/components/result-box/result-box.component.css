@@ -42,6 +42,10 @@
 .artist-box{
   width: 250px;
   height: 100px;
+  cursor: pointer;
+}
+.album-box{
+  cursor: pointer;
 }
 .horizontal-container{
   display: flex;

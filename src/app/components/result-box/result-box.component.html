@@ -6,7 +6,7 @@
         <div class="horizontal-container">
           <div class="horizontal-container-image">
             <img *ngIf="song.album.images[2]" class="image-container" src="{{this.song.album.images[2].url}}">
-            <img (click)="this.playSound(this.song.preview_url)" *ngIf="song.album.images[2]" class="audio-controller" src="{{this.playIcon(this.song.preview_url)}}">
+            <img *ngIf="this.song.preview_url" (click)="this.playSound(this.song.preview_url)" class="audio-controller" src="{{this.playIcon(this.song.preview_url)}}">
           </div>
           <div class="horizontal-container-description">
             <h3 class="title">{{song.name}}</h3>
@@ -23,7 +23,7 @@
   <h2 class="content-type-text">Artist</h2>
   <div class="container">
     <div *ngFor="let artist of artists">
-      <div class="result-box artist-box">
+      <div (click)="this.gotoPage(artist.external_urls.spotify)" class="result-box artist-box">
         <h3 class="title artist-text">{{artist.name}}</h3>
         <div class="artist-text">
           <span *ngIf="artist.genres[0]" class="subtitle genre">{{artist.genres[0]}}</span>
@@ -40,7 +40,7 @@
   <h2 class="content-type-text">Albums</h2>
   <div class="container">
     <div *ngFor="let album of albums;">
-      <div class="result-box">
+      <div (click)="this.gotoPage(album.external_urls.spotify)"  class="result-box album-box">
         <div class="horizontal-container">
           <div class="horizontal-container-image">
             <img *ngIf="this.album.images[2]" class="image-container" src="{{this.album.images[2].url}}">

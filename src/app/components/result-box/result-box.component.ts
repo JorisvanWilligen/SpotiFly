@@ -24,6 +24,7 @@ export class ResultBoxComponent implements OnInit {
     this.songs = result.tracks.items;
     this.artists = result.artists.items;
     this.albums = result.albums.items;
+    console.log(this.albums)
   }
 
   playSound(source: string){
@@ -45,6 +46,10 @@ export class ResultBoxComponent implements OnInit {
     }else{
       return '/assets/images/play.png'
     }
+  }
+
+  gotoPage(page: string){
+    window.location.href = page;
   }
 
 }
