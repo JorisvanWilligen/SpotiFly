@@ -15,9 +15,24 @@ export class SearchBoxComponent implements OnInit {
   }
 
   onKey($event: KeyboardEvent) {
-    this.spotifyService.searchContent(this.searchText).subscribe( results => {
-      this.processResults.emit(results);
-    });
+    if (this.searchText === '') { return; }
+    if (this.checkCache(this.searchText)) {
+      this.processResults.emit(this.checkCache(this.searchText));
+    } else {
+      this.spotifyService.searchContent(this.searchText).subscribe(results => {
+        this.setCache(this.searchText, results);
+        this.processResults.emit(results);
+      });
+    }
+  }
+
+  checkCache(searchQuery: string) {
+    if (sessionStorage.hasOwnProperty('query-' + searchQuery)) {
+      return JSON.parse(sessionStorage.getItem('query-' + searchQuery)!);
+    }
+  }
+  setCache(searchQuery: string, results: any) {
+    sessionStorage.setItem('query-' + searchQuery, JSON.stringify(results));
   }
 
 }

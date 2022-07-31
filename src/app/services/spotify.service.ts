@@ -62,25 +62,26 @@ export class SpotifyService {
   requestAccessToken(token: string) {
     this.authToken = token;
     this.http.post<AccessToken>(this.accessUrl, this.getBody(BODY_TYPE.ACCESS_TOKEN) , this.accessRequestOptions).subscribe( tokenData => {
-      this.refreshToken = tokenData.refresh_token;
-      this.accessToken = tokenData.access_token;
-      localStorage.setItem('accessToken', this.accessToken);
-      localStorage.setItem('refreshToken', this.refreshToken);
+      this.setTokenData(tokenData);
     });
   }
 
-  setTokensFromLocal(accessToken: any, refreshToken: any) {
+  setTokensFromLocal(accessToken, refreshToken) {
     this.accessToken = accessToken;
     this.refreshToken = refreshToken;
   }
 
   refreshAccessToken() {
     this.http.post<AccessToken>(this.accessUrl, this.getBody(BODY_TYPE.REFRESH_TOKEN) , this.accessRequestOptions).subscribe( tokenData => {
-      this.refreshToken = tokenData.refresh_token;
-      this.accessToken = tokenData.access_token;
-      localStorage.setItem('accessToken', this.accessToken);
-      localStorage.setItem('refreshToken', this.refreshToken);
+      this.setTokenData(tokenData);
     });
+  }
+
+  setTokenData(tokenData: AccessToken) {
+    this.refreshToken = tokenData.refresh_token;
+    this.accessToken = tokenData.access_token;
+    localStorage.setItem('accessToken', this.accessToken);
+    localStorage.setItem('refreshToken', this.refreshToken);
   }
 
   searchContent(query: string): any {
