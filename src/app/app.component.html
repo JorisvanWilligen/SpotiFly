@@ -1,10 +1,2 @@
-<div class="searchBox">
-  <h2>Search field </h2>
-  <label>
-    <input [(ngModel)]="searchText" (keyup)="onKey($event)">
-  </label>
-</div>
-<div class="resultsBox">
-
-</div>
-
+<app-search-box (processResults)= "sendToResultBox($event)"></app-search-box>
+<app-result-box></app-result-box>

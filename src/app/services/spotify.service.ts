@@ -1,23 +1,24 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {EventEmitter, Injectable, Output} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import { SpotifyContent } from '../models/spotify-content';
 import {AccessToken} from '../models/access-token';
-import {BODY_TYPE} from '../models/enums/header-type';
 import {stringify} from "query-string";
+import {BODY_TYPE} from '../models/enums/header-type';
+
 
 @Injectable()
 export class SpotifyService {
-  private queryUrl = '';
+  private queryUrl: string;
   private authUrl = 'https://accounts.spotify.com/authorize?'; // used to retrieve auth token
   private accessUrl = 'https://accounts.spotify.com/api/token'; // used to retrieve access token
   private spotifyBaseURL = 'https://api.spotify.com/v1/';
   private clientId = '734a678bd1e9423c960a4270245a626e';
   private clientSecret = '7a0a567bb34c4aa08e5dafda1f4969f5'; // client secret safe??
   private redirectUrl = 'http://localhost:4200/'; // I should store this in environment map for test/prod cases //
-  private authToken: string = '';
-  private refreshToken: string = '';
-  public accessToken: string = '';
+  private authToken: string;
+  private refreshToken: string;
+  public accessToken: string;
+
+  @Output() searchResultsEmitted: EventEmitter<any> = new EventEmitter<any>();
 
   private accessHeader = {
     'Content-Type': 'application/x-www-form-urlencoded',
@@ -31,12 +32,12 @@ export class SpotifyService {
   }
   authUser() {
     // Maybe at state later? ( let state = random(16); )
-    window.location.href =(this.authUrl +
-        stringify({
-          response_type: 'code',
-          client_id: this.clientId,
-          redirect_uri: this.redirectUrl
-        }));
+    window.location.href = (this.authUrl +
+      stringify({
+        response_type: 'code',
+        client_id: this.clientId,
+        redirect_uri: this.redirectUrl
+      }));
   }
 
   getBody(type: BODY_TYPE) {
@@ -63,18 +64,27 @@ export class SpotifyService {
     this.http.post<AccessToken>(this.accessUrl, this.getBody(BODY_TYPE.ACCESS_TOKEN) , this.accessRequestOptions).subscribe( tokenData => {
       this.refreshToken = tokenData.refresh_token;
       this.accessToken = tokenData.access_token;
+      localStorage.setItem('accessToken', this.accessToken);
+      localStorage.setItem('refreshToken', this.refreshToken);
     });
+  }
+
+  setTokensFromLocal(accessToken: any, refreshToken: any) {
+    this.accessToken = accessToken;
+    this.refreshToken = refreshToken;
   }
 
   refreshAccessToken() {
     this.http.post<AccessToken>(this.accessUrl, this.getBody(BODY_TYPE.REFRESH_TOKEN) , this.accessRequestOptions).subscribe( tokenData => {
       this.refreshToken = tokenData.refresh_token;
       this.accessToken = tokenData.access_token;
+      localStorage.setItem('accessToken', this.accessToken);
+      localStorage.setItem('refreshToken', this.refreshToken);
     });
   }
 
-  searchContent(query: string): Observable<SpotifyContent> {
-    this.queryUrl = this.spotifyBaseURL + 'search?q=' + query + '&type=track&include_external=audio';
-    return this.http.get<SpotifyContent>(this.queryUrl);
+  searchContent(query: string): any {
+    this.queryUrl = this.spotifyBaseURL + 'search?q=' + query + '&type=track,artist,album&include_external=audio&limit=12';
+    return this.http.get<any>(this.queryUrl);
   }
 }

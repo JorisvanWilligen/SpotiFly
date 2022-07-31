@@ -1,16 +1,17 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { SpotifyService } from './services/spotify.service';
 import {ActivatedRoute} from '@angular/router';
 import {HttpParams} from '@angular/common/http';
+import {ResultBoxComponent} from './components/result-box/result-box.component';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   title = 'SpotiFly';
-  searchText = '';
+  @ViewChild(ResultBoxComponent) resultBox: ResultBoxComponent;
 
   constructor(private route: ActivatedRoute, private spotifyService: SpotifyService) {
   }
@@ -20,25 +21,26 @@ export class AppComponent implements OnInit {
   }
 
   checkAuthentication() {
-    const code = this.getParamValueQueryString('code');
-    const error = this.getParamValueQueryString('test');
-    if (!code && !error) {
-      this.spotifyService.authUser();
-    } else if (code) { // happy flow
-      this.spotifyService.requestAccessToken(code);
-    } else if (error) { // not so happy flow
-      // display error
+    if (localStorage.hasOwnProperty('accessToken')) { // check if tokens are in local storage
+      this.spotifyService.setTokensFromLocal(localStorage.getItem('accessToken'), localStorage.getItem('refreshToken'));
+    } else {
+      const code = this.getParamValueQueryString('code'); // check if we are just back from retrieving auth token
+      const error = this.getParamValueQueryString('error');
+      if (!code && !error) {
+        this.spotifyService.authUser();
+      } else if (code) { // happy flow
+        this.spotifyService.requestAccessToken(code);
+      } else if (error) { // not so happy flow
+        // display error
+      }
     }
   }
 
-  onKey($event: KeyboardEvent) {
-    this.spotifyService.searchContent(this.searchText)
-      .subscribe(result => {
-        console.log(result);
-      });
+  sendToResultBox(results: any) {
+    this.resultBox.setResult(results);
   }
 
-  getParamValueQueryString( paramName: string ) { // could be static
+  getParamValueQueryString( paramName ) { // could be static
     const url = window.location.href;
     let paramValue;
     if (url.includes('?')) {
