@@ -3,9 +3,17 @@
   <div class="container">
     <div *ngFor="let song of songs">
       <div class="result-box">
-        <h3 class="title">{{song.name}}</h3>
-        <h4 class="subtitle">{{song.artists[0].name}}</h4>
-        <h4 class="subtitle">{{song.album.name}}</h4>
+        <div class="horizontal-container">
+          <div class="horizontal-container-image">
+            <img *ngIf="song.album.images[2]" class="image-container" src="{{this.song.album.images[2].url}}">
+            <img (click)="this.playSound(this.song.preview_url)" *ngIf="song.album.images[2]" class="audio-controller" src="{{this.playIcon(this.song.preview_url)}}">
+          </div>
+          <div class="horizontal-container-description">
+            <h3 class="title">{{song.name}}</h3>
+            <h4 class="subtitle">{{song.artists[0].name}}</h4>
+            <h4 class="subtitle">{{song.album.name}}</h4>
+          </div>
+        </div>
       </div>
     </div>
     <div *ngIf="songs.length == 0">
@@ -31,10 +39,17 @@
   </div>
   <h2 class="content-type-text">Albums</h2>
   <div class="container">
-    <div *ngFor="let album of albums">
+    <div *ngFor="let album of albums;">
       <div class="result-box">
-        <h3 class="title">{{album.name}}</h3>
-        <h4 class="subtitle">{{album.release_date}}</h4>
+        <div class="horizontal-container">
+          <div class="horizontal-container-image">
+            <img *ngIf="this.album.images[2]" class="image-container" src="{{this.album.images[2].url}}">
+          </div>
+          <div class="horizontal-container-description">
+            <h3 class="title">{{album.name}}</h3>
+            <h4 class="subtitle">{{album.release_date}}</h4>
+          </div>
+          </div>
       </div>
     </div>
     <div *ngIf="albums.length == 0">

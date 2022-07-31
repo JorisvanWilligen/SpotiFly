@@ -30,6 +30,11 @@ export class TokenInterceptorService implements HttpInterceptor {
           console.log('Should refresh token');
           this.spotifyService.refreshAccessToken();
         }
+        if (err.status === 401) {
+          console.log('Should re-Authenticate');
+          localStorage.clear();
+          this.spotifyService.authUser();
+        }
         const error = err.error.message || err.statusText;
         return throwError(error);
       })

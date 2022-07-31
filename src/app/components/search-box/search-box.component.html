@@ -1,6 +1,5 @@
-<div class="searchBox">
-  <h2>Search field </h2>
+<div>
   <label>
-    <input [(ngModel)]="searchText" (keyup)="onKey($event)">
+    <input class="searchBox" [(ngModel)]="searchText" (keyup)="onKey($event)" placeholder="Type to fly to any song, artist or album">
   </label>
 </div>

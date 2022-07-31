@@ -1,4 +1,5 @@
 .content-type-text{
+  font-family: "KGRedHands", Arial, Helvetica, sans-serif;
   font-size: 40px;
   text-align: center;
   color: white;
@@ -41,4 +42,18 @@
 .artist-box{
   width: 250px;
   height: 100px;
+}
+.horizontal-container{
+  display: flex;
+}
+.horizontal-container-image{
+  flex: 1;
+}
+.horizontal-container-description{
+  flex: 3;
+}
+.audio-controller{
+  width: 50px;
+  height: 50px;
+  margin: 10px;
 }

@@ -12,6 +12,8 @@ export class ResultBoxComponent implements OnInit {
   songs: SpotifySong[];
   artists: SpotifyArtist[];
   albums: SpotifyAlbum[];
+  audio = new Audio;
+  currentlyPlaying: string = '';
 
   constructor() { }
 
@@ -23,6 +25,27 @@ export class ResultBoxComponent implements OnInit {
     this.artists = result.artists.items;
     this.albums = result.albums.items;
     console.log(this.songs);
+  }
+
+  playSound(source: string){
+    this.audio.currentTime = 0;
+    this.audio.pause();
+    if(this.currentlyPlaying != source) {
+      this.audio.src = source;
+      this.audio.load();
+      this.audio.play();
+      this.currentlyPlaying = source;
+    }else{
+      this.currentlyPlaying = '';
+    }
+  }
+
+  playIcon(source: string){
+    if (source == this.currentlyPlaying){
+      return '/assets/images/pause.png'
+    }else{
+      return '/assets/images/play.png'
+    }
   }
 
 }
