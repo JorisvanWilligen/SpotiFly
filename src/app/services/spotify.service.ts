@@ -3,17 +3,18 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {AccessToken} from '../models/access-token';
 import {stringify} from "query-string";
 import {BODY_TYPE} from '../models/enums/header-type';
+import {environment} from "../../environments/environment";
 
 
 @Injectable()
 export class SpotifyService {
+  private authUrl = environment.authUrl;
+  private accessUrl = environment.accessUrl;
+  private spotifyBaseURL = environment.spotifyBaseURL;
+  private clientId = environment.clientId;
+  private clientSecret = environment.clientSecret;
+  private baseUrl = environment.baseUrl;
   private queryUrl: string;
-  private authUrl = 'https://accounts.spotify.com/authorize?'; // used to retrieve auth token
-  private accessUrl = 'https://accounts.spotify.com/api/token'; // used to retrieve access token
-  private spotifyBaseURL = 'https://api.spotify.com/v1/';
-  private clientId = '734a678bd1e9423c960a4270245a626e';
-  private clientSecret = '7a0a567bb34c4aa08e5dafda1f4969f5'; // client secret safe??
-  private redirectUrl = 'http://localhost:4200/'; // I should store this in environment map for test/prod cases //
   private authToken: string;
   private refreshToken: string;
   public accessToken: string;
@@ -36,7 +37,7 @@ export class SpotifyService {
       stringify({
         response_type: 'code',
         client_id: this.clientId,
-        redirect_uri: this.redirectUrl
+        redirect_uri: this.baseUrl
       }));
   }
 
@@ -45,7 +46,7 @@ export class SpotifyService {
       return new HttpParams({
         fromObject: {
           code: this.authToken,
-          redirect_uri: this.redirectUrl,
+          redirect_uri: this.baseUrl,
           grant_type: 'authorization_code'
         }
       });
