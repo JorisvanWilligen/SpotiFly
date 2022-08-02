@@ -24,13 +24,15 @@ export class AppComponent implements OnInit {
     if (localStorage.hasOwnProperty('accessToken')) { // check if tokens are in local storage
       this.spotifyService.setTokensFromLocal(localStorage.getItem('accessToken'), localStorage.getItem('refreshToken'));
     } else {
-      const code = this.getParamValueQueryString('code'); // check if we are just back from retrieving auth token
+      const code = this.getParamValueQueryString('code');
       const error = this.getParamValueQueryString('error');
-      if (!code && !error) {
+      const state = this.getParamValueQueryString('state');
+      if (state !== localStorage.getItem("state")) {
         this.spotifyService.authUser();
-      } else if (code) { // happy flow
+      } else if (code && state == localStorage.getItem("state")) { // happy flow
         this.spotifyService.requestAccessToken(code);
-      } else if (error) { // not so happy flow
+      }
+      if (error) { // not so happy flow
         // display error
       }
     }
