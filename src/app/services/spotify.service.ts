@@ -104,11 +104,8 @@ export class SpotifyService {
   }
 
   requestAccessToken(token: string) {
-    console.log('token halen');
-    console.log(token);
     this.authToken = token;
     this.http.post<AccessToken>(this.accessUrl, this.getBody(BODY_TYPE.ACCESS_TOKEN) , this.accessRequestOptions).subscribe( tokenData => {
-      console.log(tokenData);
       this.setTokenData(tokenData);
     });
   }
