@@ -8,7 +8,7 @@ import {AnimationItem} from "ngx-lottie/lib/symbols";
   templateUrl: './search-box.component.html',
   styleUrls: ['./search-box.component.css']
 })
-export class SearchBoxComponent implements OnInit {
+export class SearchBoxComponent {
   options: AnimationOptions = {
     path: 'https://assets7.lottiefiles.com/packages/lf20_zcg2skbo.json'
   };
@@ -16,9 +16,6 @@ export class SearchBoxComponent implements OnInit {
   constructor(private spotifyService: SpotifyService) {}
   public searchText = '';
   public loading = false;
-
-  ngOnInit() {
-  }
 
   onKey($event: KeyboardEvent) {
     if (this.searchText === '') { return; }
