@@ -4,9 +4,7 @@ import {AccessToken} from '../models/access-token';
 import {stringify} from "query-string";
 import {BODY_TYPE} from '../models/enums/header-type';
 import {environment} from "../../environments/environment";
-import {sha256} from "js-sha256";
-import { encode } from 'js-base64';
-import * as CryptoJS from 'crypto-js';
+import {HelperService} from "../shared/utils/helper.service";
 
 
 @Injectable()
@@ -34,37 +32,16 @@ export class SpotifyService {
   constructor(private http: HttpClient) {
   }
 
-  getRandomString(length){
-    var result = "";
-    var characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    var charactersLength = characters.length;
-    for (var i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  };
-
-  // helper function to generate a random number
-  getRandomInt(min, max){
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-
   authUser() {
-    const codeVerifier = this.getRandomString(this.getRandomInt(43, 128));
-    const state = this.getRandomString(12);
+    const codeVerifier = HelperService.getRandomString(HelperService.getRandomInt(43, 128));
+    const state = HelperService.getRandomString(12);
 
     // Set the code verifier and state in local storage so we can check it later
     localStorage.setItem('code-verifier', codeVerifier);
     localStorage.setItem('state', state);
 
-    const codeVerifierHash = CryptoJS.SHA256(codeVerifier).toString(CryptoJS.enc.Base64);
-    const codeChallenge = codeVerifierHash
-      .replace(/=/g, '')
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_');
+    //generate code challenge
+    const codeChallenge = HelperService.generateCodeChallenge(codeVerifier);
 
     // open constructed authentication url
     window.location.href = (this.authUrl +
