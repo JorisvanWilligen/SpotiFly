@@ -3,17 +3,18 @@ import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {AccessToken} from '../models/access-token';
 import {stringify} from "query-string";
 import {BODY_TYPE} from '../models/enums/header-type';
+import {environment} from "../../environments/environment";
+import {HelperService} from "../shared/utils/helper.service";
 
 
 @Injectable()
 export class SpotifyService {
+  private authUrl = environment.authUrl;
+  private accessUrl = environment.accessUrl;
+  private spotifyBaseURL = environment.spotifyBaseURL;
+  private clientId = environment.clientId;
+  private baseUrl = environment.baseUrl;
   private queryUrl: string;
-  private authUrl = 'https://accounts.spotify.com/authorize?'; // used to retrieve auth token
-  private accessUrl = 'https://accounts.spotify.com/api/token'; // used to retrieve access token
-  private spotifyBaseURL = 'https://api.spotify.com/v1/';
-  private clientId = '734a678bd1e9423c960a4270245a626e';
-  private clientSecret = '7a0a567bb34c4aa08e5dafda1f4969f5'; // client secret safe??
-  private redirectUrl = 'http://localhost:4200/'; // I should store this in environment map for test/prod cases //
   private authToken: string;
   private refreshToken: string;
   public accessToken: string;
@@ -21,8 +22,8 @@ export class SpotifyService {
   @Output() searchResultsEmitted: EventEmitter<any> = new EventEmitter<any>();
 
   private accessHeader = {
-    'Content-Type': 'application/x-www-form-urlencoded',
-    Authorization: 'Basic ' + (btoa(this.clientId + ':' + this.clientSecret))
+    Accept: 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded;'
   };
   private accessRequestOptions = {
     headers: new HttpHeaders(this.accessHeader),
@@ -30,28 +31,48 @@ export class SpotifyService {
 
   constructor(private http: HttpClient) {
   }
+
   authUser() {
-    // Maybe at state later? ( let state = random(16); )
+    const codeVerifier = HelperService.getRandomString(HelperService.getRandomInt(43, 128));
+    const state = HelperService.getRandomString(12);
+
+    // Set the code verifier and state in local storage so we can check it later
+    localStorage.setItem('code-verifier', codeVerifier);
+    localStorage.setItem('state', state);
+
+    //generate code challenge
+    const codeChallenge = HelperService.generateCodeChallenge(codeVerifier);
+
+    // open constructed authentication url
     window.location.href = (this.authUrl +
       stringify({
         response_type: 'code',
         client_id: this.clientId,
-        redirect_uri: this.redirectUrl
+        redirect_uri: this.baseUrl,
+        state: state,
+        code_challenge: codeChallenge,
+        code_challenge_method: 'S256'
       }));
-  }
+  };
+
+
 
   getBody(type: BODY_TYPE) {
     if (type === BODY_TYPE.ACCESS_TOKEN) { // can be switch if more types will be added
       return new HttpParams({
         fromObject: {
           code: this.authToken,
-          redirect_uri: this.redirectUrl,
-          grant_type: 'authorization_code'
+          redirect_uri: this.baseUrl,
+          grant_type: 'authorization_code',
+          client_id: environment.clientId,
+          code_verifier: localStorage.getItem('code-verifier')!,
         }
       });
     } else {
       return new HttpParams({
         fromObject: {
+          client_id: environment.clientId,
+          code_verifier: localStorage.getItem('code-verifier')!,
           grant_type: 'refresh_token',
           refresh_token: this.refreshToken
         }

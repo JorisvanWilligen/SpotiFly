@@ -23,7 +23,7 @@
   <h2 class="content-type-text">Artist</h2>
   <div class="container">
     <div *ngFor="let artist of artists">
-      <div (click)="this.gotoPage(artist.external_urls.spotify)" class="result-box artist-box">
+      <div (click)="this.gotoPage(artist.external_urls.spotify)" class="result-box artist-box clickable">
         <h3 class="title artist-text">{{artist.name}}</h3>
         <div class="artist-text">
           <span *ngIf="artist.genres[0]" class="subtitle genre">{{artist.genres[0]}}</span>
@@ -40,7 +40,7 @@
   <h2 class="content-type-text">Albums</h2>
   <div class="container">
     <div *ngFor="let album of albums;">
-      <div (click)="this.gotoPage(album.external_urls.spotify)"  class="result-box album-box">
+      <div (click)="this.gotoPage(album.external_urls.spotify)"  class="result-box clickable">
         <div class="horizontal-container">
           <div class="horizontal-container-image">
             <img *ngIf="this.album.images[2]" class="image-container" src="{{this.album.images[2].url}}">
@@ -49,7 +49,8 @@
             <h3 class="title">{{album.name}}</h3>
             <h4 class="subtitle">{{album.release_date}}</h4>
           </div>
-          </div>
+          <div style="flex: 1"></div>
+        </div>
       </div>
     </div>
     <div *ngIf="albums.length == 0">

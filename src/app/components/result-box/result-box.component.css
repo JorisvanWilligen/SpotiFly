@@ -42,22 +42,30 @@
 .artist-box{
   width: 250px;
   height: 100px;
-  cursor: pointer;
 }
-.album-box{
+.clickable:hover{
   cursor: pointer;
+  background-color: #ebf1ff;
 }
 .horizontal-container{
   display: flex;
+  align-items: flex-start;
+  height: 100%;
 }
 .horizontal-container-image{
   flex: 1;
 }
 .horizontal-container-description{
+  text-align: center;
   flex: 3;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .audio-controller{
   width: 50px;
   height: 50px;
   margin: 10px;
 }
+

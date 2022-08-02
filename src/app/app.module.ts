@@ -10,6 +10,7 @@ import {SpotifyService} from "./services/spotify.service";
 import {SearchBoxComponent} from "./components/search-box/search-box.component";
 import {ResultBoxComponent} from "./components/result-box/result-box.component";
 import {LottieModule} from "ngx-lottie";
+import {HelperService} from "./shared/utils/helper.service";
 
 export function playerFactory(): any {
   return import('lottie-web');
@@ -34,7 +35,8 @@ export function playerFactory(): any {
       useClass: TokenInterceptorService,
       multi: true,
     },
-    SpotifyService
+    SpotifyService,
+    HelperService
   ],
   bootstrap: [AppComponent]
 })
