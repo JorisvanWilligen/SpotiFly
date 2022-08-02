@@ -9,7 +9,8 @@ ng serve
 Set your own clientID and redirect URL in environment.ts
 Do not forget to also set the redirect URL in the developer dashboard of Spotify.
 
-To test it without changes you don't have to change anything but you will need to login using the credentials of my spam account:
+The fastest way to test this is to not change anything.
+But then you will need to login using the credentials of my spam account:
 
 jorlol@live.nl
 Pass: 4hourcodechallengeSpotifly
