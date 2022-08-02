@@ -8,7 +8,7 @@ import {SpotifyAlbum} from '../../models/spotify-album';
   templateUrl: './result-box.component.html',
   styleUrls: ['./result-box.component.css']
 })
-export class ResultBoxComponent implements OnInit {
+export class ResultBoxComponent {
   songs: SpotifySong[];
   artists: SpotifyArtist[];
   albums: SpotifyAlbum[];
@@ -17,8 +17,6 @@ export class ResultBoxComponent implements OnInit {
 
   constructor() { }
 
-  ngOnInit() {
-  }
 
   setResult(result: any) {
     this.songs = result.tracks.items;
